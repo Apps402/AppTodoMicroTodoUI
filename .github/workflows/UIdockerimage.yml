@@ -1,0 +1,15 @@
+name: "Micro ToDo UI Image"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  BuildImage:
+    
+
+
