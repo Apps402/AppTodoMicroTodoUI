@@ -1,15 +1,41 @@
 name: "Micro ToDo UI Image"
 
-on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
   BuildImage:
+    runs-on: ubuntu-latest
+    env:
+        ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+        ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        ARM_USE_OIDC: true
+        IMAGE_NAME: appsmicrotodo-ui
+        IMAGE_TAG: v1
+        ACR_NAME: appsacr000100090
+        ACR_LOGIN_SERVER: appsacr000100090.azurecr.io
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to ACR
+        run: |
+          az acr login --name $ACR_NAME
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+
+      - name: Tag Docker Image for ACR
+        run: |
+          docker tag $IMAGE_NAME:$IMAGE_TAG $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+
+      - name: Push Docker Image to ACR
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+
+
     
 
 
