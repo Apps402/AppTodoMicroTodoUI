@@ -36,24 +36,26 @@ jobs:
           
 
 
-      - name: Log in to ACR
+      - name: Get ACR Access Token
+        id: acr-token
         run: |
           TOKEN=$(az acr login -n $ACR_NAME --expose-token --output tsv --query accessToken)
-          docker login $ACR_LOGIN_SERVER --username 00000000-0000-0000-0000-000000000000 --password-stdin <<< "$TOKEN"
+          echo "TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Docker login to ACR using SP token
+        run: |
+          echo $TOKEN | docker login $ACR_LOGIN_SERVER \
+            --username 00000000-0000-0000-0000-000000000000 \
+            --password-stdin
 
       - name: Build Docker Image
-        run: |
-          sudo docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        run: docker build -t $IMAGE_NAME:$IMAGE_TAG .
 
       - name: Tag Docker Image for ACR
-        run: |
-          sudo docker tag $IMAGE_NAME:$IMAGE_TAG $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+        run: docker tag $IMAGE_NAME:$IMAGE_TAG $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
 
       - name: Push Docker Image to ACR
-        run: |
-          TOKEN=$(az acr login -n $ACR_NAME --expose-token --output tsv --query accessToken)
-          docker login $ACR_LOGIN_SERVER --username 00000000-0000-0000-0000-000000000000 --password-stdin <<< "$TOKEN"
-          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
+        run: docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
 
 
     
