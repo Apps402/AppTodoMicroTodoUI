@@ -32,11 +32,11 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
+          TOKEN: ${{secrets.TOKEN}}
 
 
       - name: Log in to ACR
         run: |
-          TOKEN=$(az acr login -n $ACR_NAME --expose-token --output tsv --query accessToken)
           docker login $ACR_LOGIN_SERVER --username 00000000-0000-0000-0000-000000000000 --password-stdin <<< "$TOKEN"
 
 
@@ -50,6 +50,7 @@ jobs:
 
       - name: Push Docker Image to ACR
         run: |
+          
           sudo docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG
 
 
