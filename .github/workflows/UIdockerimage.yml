@@ -12,8 +12,8 @@ jobs:
         ARM_USE_OIDC: true
         IMAGE_NAME: appsmicrotodo-ui
         IMAGE_TAG: v1
-        ACR_NAME: appsacr000100090
-        ACR_LOGIN_SERVER: appsacr000100090.azurecr.io
+        ACR_NAME: appsacrrrrrr
+        ACR_LOGIN_SERVER: appsacrrrrrr.azurecr.io
 
     steps:
       - name: Checkout code
