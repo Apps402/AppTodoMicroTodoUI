@@ -36,7 +36,9 @@ jobs:
 
       - name: Log in to ACR
         run: |
-          az acr login --name $ACR_NAME
+          TOKEN=$(az acr login -n $ACR_NAME --expose-token --output tsv --query accessToken)
+          docker login $ACR_LOGIN_SERVER --username 00000000-0000-0000-0000-000000000000 --password-stdin <<< "$TOKEN"
+
 
       - name: Build Docker Image
         run: |
