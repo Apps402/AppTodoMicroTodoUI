@@ -14,7 +14,7 @@ spec:
         app: todo-ui
     spec:
       containers:
-        - image: appsacrrrrrr.azurecr.io/appsmicrotodo-ui
+        - image: appsacrrrrrr.azurecr.io/appsmicrotodo-ui:v1
           name: apps-todo-ui
           ports:
             - containerPort: 80
