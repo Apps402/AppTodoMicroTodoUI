@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: todoui-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: todoui.aparnasapps.icu
+      http:
+        paths:
+        -  pathType: Prefix
+           path: "/"
+           backend:
+             service:
+               name: apps-todoui-svc
+               port:
+                 number: 80
