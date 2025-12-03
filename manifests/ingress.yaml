@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: todoui-ingress
 spec:
-  ingressClassName: nginx
+  ingressClassName: azure-application-gateway
   rules:
     - host: ui.aparnasapps.icu
       http:
